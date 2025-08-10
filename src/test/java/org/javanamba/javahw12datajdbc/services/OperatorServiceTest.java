@@ -230,9 +230,6 @@ public class OperatorServiceTest {
 
         assertThat(result.getStatus()).isFalse();
 
-        // Проверка что статус изменен на false
-        assertThat(result.getStatus()).isFalse();
-
         // Проверка что вызван save
         Mockito.verify(operatorRepository).save(Mockito.any());
     }

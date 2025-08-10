@@ -96,9 +96,7 @@ public class ClientServiceTest {
         Client.ClientDto dto = new Client.ClientDto();
         dto.setId(99L);
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            clientService.saveClientDto(dto);
-        });
+        assertThrows(EntityNotFoundException.class, () -> clientService.saveClientDto(dto));
 
         verify(clientRepository, never()).save(any());
     }

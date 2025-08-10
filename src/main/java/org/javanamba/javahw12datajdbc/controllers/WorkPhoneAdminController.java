@@ -25,8 +25,7 @@ public class WorkPhoneAdminController {
     @PostMapping("/add")
     public String addWorkPhone(
             @Valid @ModelAttribute("workPhoneDto") WorkPhone.WorkPhoneDto workPhoneDto,
-            BindingResult bindingResult,
-            Model model) {
+            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "admin/phones/add-work-phone";

@@ -23,19 +23,19 @@
 А именно:
 - **CrudRepository**: предоставляет базовые CRUD операции (create, read, update, delete).
 - **PagingAndSortingRepository**: расширяет CrudRepository и добавляет поддержку пагинации и сортировки.
-  [Пример использования в проекте](org/javanamba/jhwjdbcdata/repository/ClientRepository.java)
+  [Пример использования в проекте](src/main/java/org/javanamba/javahw12datajdbc/repository/ClientRepository.java)
 
 - Именованные запросы (Named Queries): Позволяют определять SQL запросы в аннотациях репозитория.
-  [Пример использования в проекте](org/javanamba/jhwjdbcdata/repository/OperatorRepository.java)
+  [Пример использования в проекте](src/main/java/org/javanamba/javahw12datajdbc/repository/OperatorRepository.java)
 
 - Методы запросов (Query Methods): Spring Data JDBC автоматически генерирует SQL запросы на основе имен методов.
-  [Пример использования в проекте](src/main/java/org/javanamba/jhwjdbcdata/repository/WorkPhoneRepository.java) - методы: findByPhoneNumberContainingAndActiveTrue и findBySerialNumberContainingAndActiveTrue
+  [Пример использования в проекте](src/main/java/org/javanamba/javahw12datajdbc/repository/WorkPhoneRepository.java) - методы: findByPhoneNumberContainingAndActiveTrue и findBySerialNumberContainingAndActiveTrue
 
 - JdbcTemplate: Позволяет выполнять произвольные SQL запросы.
-  [Пример использования в проекте](org/javanamba/jhwjdbcdata/repository/CustomOrderRepository.java)
+  [Пример использования в проекте](src/main/java/org/javanamba/javahw12datajdbc/repository/CustomOrderRepository.java)
 
 - NamedParameterJdbcTemplate: Аналогичен JdbcTemplate, но использует именованные параметры.
-  [Пример использования в проекте](src/main/java/org/javanamba/jhwjdbcdata/repository/CustomOperatorRepository.java)
+  [Пример использования в проекте](src/main/java/org/javanamba/javahw12datajdbc/repository/CustomOperatorRepository.java)
 
 ## Настройка для запуска
 

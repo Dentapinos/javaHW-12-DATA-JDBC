@@ -73,7 +73,6 @@
                                 <option th:value="${ph.id}" th:text="${ph.serialNumber}"></option>
                             </th:block>
                         </th:block>
-
                         <!-- Если телефонов нет -->
                         <th:block th:if="${#lists.isEmpty(phones)}">
                             <option disabled>Свободных телефонов нет</option>

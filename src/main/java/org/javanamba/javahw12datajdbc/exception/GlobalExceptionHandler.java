@@ -14,7 +14,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public String handleAllExceptions(Exception ex, Model model) {
+    public String handleAllExceptions(Model model) {
         model.addAttribute("error", "Извините, произошла ошибка");
         return "error";
     }

@@ -92,7 +92,6 @@ body, html {
 }
 
 .no-touch .scrollable.hover:hover {
-    overflow-y: auto;
     overflow: visible;
 }
 
