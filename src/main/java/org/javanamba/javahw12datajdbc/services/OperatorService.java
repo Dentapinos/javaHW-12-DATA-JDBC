@@ -79,7 +79,7 @@ public class OperatorService {
     }
 
     @Transactional
-    public Operator updateOperatorDto(Operator.OperatorDto operatorDto) {
+    public void updateOperatorDto(Operator.OperatorDto operatorDto) {
         Operator operator = new Operator();
         // Обновление полей
         operator.setId(operatorDto.getId());
@@ -90,7 +90,7 @@ public class OperatorService {
         operator.setPhoneNumber(operatorDto.getPhone());
         operator.setStatus(true);
         operator.setAddress(operatorDto.getAddress());
-        return operatorRepository.save(operator);
+        operatorRepository.save(operator);
     }
 
     @Transactional

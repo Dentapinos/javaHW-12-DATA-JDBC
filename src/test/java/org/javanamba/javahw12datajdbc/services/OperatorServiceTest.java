@@ -1,9 +1,9 @@
 package org.javanamba.javahw12datajdbc.services;
 
-import org.javanamba.jhwjdbcdata.entity.Operator;
-import org.javanamba.jhwjdbcdata.exception.EntityNotFoundException;
-import org.javanamba.jhwjdbcdata.repository.CustomOperatorRepository;
-import org.javanamba.jhwjdbcdata.repository.OperatorRepository;
+import org.javanamba.javahw12datajdbc.entity.Operator;
+import org.javanamba.javahw12datajdbc.exception.EntityNotFoundException;
+import org.javanamba.javahw12datajdbc.repository.CustomOperatorRepository;
+import org.javanamba.javahw12datajdbc.repository.OperatorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package org.javanamba.javahw12datajdbc.services;
 
-import org.javanamba.jhwjdbcdata.entity.WorkPhone;
-import org.javanamba.jhwjdbcdata.exception.EntityNotFoundException;
-import org.javanamba.jhwjdbcdata.repository.WorkPhoneRepository;
+import org.javanamba.javahw12datajdbc.entity.WorkPhone;
+import org.javanamba.javahw12datajdbc.exception.EntityNotFoundException;
+import org.javanamba.javahw12datajdbc.repository.WorkPhoneRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package org.javanamba.javahw12datajdbc.services;
 
-import org.javanamba.jhwjdbcdata.dtos.PhoneUsageHistoryDTO;
-import org.javanamba.jhwjdbcdata.entity.PhoneUsageHistory;
-import org.javanamba.jhwjdbcdata.repository.PhoneUsageHistoryRepository;
+import org.javanamba.javahw12datajdbc.dtos.PhoneUsageHistoryDTO;
+import org.javanamba.javahw12datajdbc.entity.PhoneUsageHistory;
+import org.javanamba.javahw12datajdbc.repository.PhoneUsageHistoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

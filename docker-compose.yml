@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.2.0
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: jdbc-app
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+
+  jdbc-app:
+    image: jdbc-application
+    container_name: jdbc-app-container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jdbc-app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
