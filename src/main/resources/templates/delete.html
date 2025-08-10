@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удалить оператора</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Удалить оператора</h1>
+<button onclick="showModal()">Удалить оператора</button>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Вы уверены, что хотите удалить этого оператора?</p>
+        <div class="modal-buttons">
+            <button onclick="confirmDelete()">Да</button>
+            <button onclick="closeModal()">Нет</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let operatorId;
+
+    function showModal(id) {
+        operatorId = id;
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    function confirmDelete() {
+        window.location.href = '/admin/operators/delete/' + operatorId;
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+</body>
+</html>

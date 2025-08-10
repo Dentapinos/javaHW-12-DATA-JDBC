@@ -8,6 +8,7 @@ public class JavaHw12DataJdbcApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JavaHw12DataJdbcApplication.class, args);
+        System.out.println("http://localhost:8080/");
     }
 
 }

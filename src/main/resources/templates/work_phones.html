@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>Рабочие телефоны</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Список рабочих телефонов</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/work-phones}" method="get">
+            <label for="workPhoneSelect">Поиск по:</label>
+            <select id="workPhoneSelect" name="searchKey">
+                <option value="phoneNumber" th:selected="${searchKey == 'phoneNumber'}">Номер телефона</option>
+                <option value="serialNumber" th:selected="${searchKey == 'serialNumber'}">Серийному №</option>
+            </select>
+            <label>
+                <input type="text" name="searchValue" placeholder="Поиск рабочих телефонов..." th:value="${searchValue == null ? '' : searchValue}" />
+            </label>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${all.number}" name="pagePrimaryContent">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <p th:if="${searchValue != null && !searchValue.isEmpty()}" th:text="${searchedList != null && !searchedList.isEmpty() ? ('Найдено ' + searchedList.getTotalElements() + ' записей') : 'Найдено 0 записей '}"></p>
+
+        <!-- Таблица найденных рабочих телефонов-->
+        <table th:if="${searchedList != null && !searchedList.isEmpty()}">
+            <thead>
+            <tr class="searched">
+                <th>ID</th>
+                <th>Серийный №</th>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="workPhone : ${searchedList.content}">
+                <td th:text="${workPhone.id}"></td>
+                <td th:text="${workPhone.serialNumber}"></td>
+                <td th:text="${workPhone.phoneNumber}"></td>
+                <td th:text="${workPhone.phoneType}"></td>
+                <th:block th:if="${isUpdate}">
+                    <td>
+                        <form th:action="@{/admin/work-phones/edit/{id}(id=${workPhone.id})}" method="get">
+                            <input type="submit" value="Изменить">
+                        </form>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией -->
+        <div th:if="${searchedList != null && !searchedList.isEmpty()}" class="pagination">
+            <a th:if="${searchedList.hasPrevious()}" th:href="@{/work-phones(pageSearchedContent=${searchedList.number - 1}, pagePrimaryContent=${pagePrimaryContent}, searchKey=${searchKey}, searchValue=${searchValue}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${searchedList.number + 1} + ' из ' + ${searchedList.totalPages}"></span>
+            <a th:if="${searchedList.hasNext()}" th:href="@{/work-phones(pageSearchedContent=${searchedList.number + 1}, pagePrimaryContent=${pagePrimaryContent}, searchKey=${searchKey}, searchValue=${searchValue}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+
+        <!-- Карточка для отображения текста -->
+        <div class="card" th:if="${jsonText}">
+            <pre th:text="${jsonText}"></pre>
+        </div>
+
+        <!-- Таблица рабочих телефонов -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Серийный №</th>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="workPhone : ${all.content}">
+                <td th:text="${workPhone.id}"></td>
+                <td th:text="${workPhone.serialNumber}"></td>
+                <td th:text="${workPhone.phoneNumber}"></td>
+                <td th:text="${workPhone.phoneType}"></td>
+                <th:block th:if="${isUpdate}">
+                    <td>
+                        <form th:action="@{/admin/work-phones/edit/{id}(id=${workPhone.id})}" method="get">
+                            <input type="submit" value="Изменить">
+                        </form>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+        <!-- Элементы управления пагинацией -->
+        <div th:if="${all != null && !all.isEmpty()}" class="pagination">
+            <a th:if="${all.hasPrevious()}" th:href="@{/work-phones(pagePrimaryContent=${all.number - 1}, pageSearchedContent=${pageSearchedContent}, searchKey=${searchKey}, searchValue=${searchValue}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${all.number + 1} + ' из ' + ${all.totalPages}"></span>
+            <a th:if="${all.hasNext()}" th:href="@{/work-phones(pagePrimaryContent=${all.number + 1}, pageSearchedContent=${pageSearchedContent}, searchKey=${searchKey}, searchValue=${searchValue}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* Основные стили таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+/* Заголовки таблицы */
+th {
+    background-color: #f8f9fa;
+    color: #495057;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Стили для строк таблицы */
+tr {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Стили для ячеек таблицы */
+td {
+    padding: 12px;
+    color: #495057;
+}
+
+/*!* Чередование цветов для строк операторов и их задач *!*/
+/*tr.tr__child:nth-child(even) {*/
+/*    background-color: #f8f9fa; !* Бледный цвет для четных строк *!*/
+/*}*/
+
+/*tr.tr__child:nth-child(odd) {*/
+/*    background-color: #e9ecef; !* Более бледный цвет для нечетных строк *!*/
+/*}*/
+
+/* Стили для строк без задач */
+
+td.no__content_text {
+    font-style: italic;
+}

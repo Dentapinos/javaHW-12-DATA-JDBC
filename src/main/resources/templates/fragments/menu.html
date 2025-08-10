@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav class="main-menu" id="main-menu">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    <i class="fa fa-home fa-2x"></i>
+                    <span class="nav-text">Главная</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a th:href="@{/operators}">
+                    <i class="fa fa-users fa-2x"></i>
+                    <span class="nav-text">Операторы</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a th:href="@{/tasks}">
+                    <i class="fa fa-tasks fa-2x"></i>
+                    <span class="nav-text">Задачи</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a th:href="@{/orders}">
+                    <i class="fa fa-columns fa-2x"></i>
+                    <span class="nav-text">Заявки</span>
+                </a>
+            </li>
+            <li class="has-subnav">
+                <a th:href="@{/work-phones}">
+                    <i class="fa fa-phone fa-2x"></i>
+                    <span class="nav-text">Рабочие телефоны</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/clients}">
+                    <i class="fa fa-user fa-2x"></i>
+                    <span class="nav-text">Клиенты</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/phone-usage-history}">
+                    <i class="fa fa-list fa-2x"></i>
+                    <span class="nav-text">История использования телефонов</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin-panel}">
+                    <i class="fa fa-star fa-2x"></i>
+                    <span class="nav-text">Админка</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="logout">
+            <li>
+                <a href="/logout">
+                    <i class="fa fa-power-off fa-2x"></i>
+                    <span class="nav-text">Выход</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>

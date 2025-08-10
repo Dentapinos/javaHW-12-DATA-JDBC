@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/c_operator.css}">
+  <title>Добавить заявку</title>
+</head>
+<body>
+<div class="area">
+  <!-- Включение фрагмента меню -->
+  <div th:replace="~{fragments/menu :: nav}"></div>
+
+  <div class="content">
+      <h1>Добавить заявку</h1>
+      <div class="content-center">
+        <form th:action="@{/admin/orders/add}" th:object="${orderDto}" method="post">
+
+        <div class="form__item">
+          <label for="description" class="form__label">Описание:</label>
+          <textarea id="description" class="form__input" th:field="*{description}" required></textarea>
+        </div>
+
+        <div class="form__item">
+          <label for="clientsComment" class="form__label">Комментарий клиента:</label>
+          <textarea id="clientsComment" class="form__input" th:field="*{clientsComment}"></textarea>
+        </div >
+
+        <div class="form__item">
+          <label for="operatorsComment" class="form__label">Комментарий оператора:</label>
+          <textarea id="operatorsComment" class="form__input" th:field="*{operatorsComment}"></textarea>
+        </div>
+
+        <div class="form__item">
+          <label for="clientId" class="form__label">Клиент: <a th:href="@{/admin/clients/add}">Создать клиента</a></label>
+          <select id="clientId" th:field="*{clientId}" required>
+            <option th:each="client : ${clientsNames}" th:value="${client.id}" th:text="${client.lastName + ' ' + client.firstName + ' ' + client.patronymic}"></option>
+          </select>
+        </div>
+
+        <div class="form__item">
+          <label for="operatorId" class="form__label">Оператор:</label>
+          <select id="operatorId"  th:field="*{operatorId}" required>
+            <option hidden="hidden" value="0">Выберите оператора</option>
+            <option th:each="operator : ${operatorsNames}" th:value="${operator.id}" th:text="${operator.lastName + ' ' + operator.firstName}"></option>
+          </select>
+        </div>
+
+          <div class="block_btn">
+            <input type="submit" value="Добавить" class="form__btn" />
+          </div>
+      </form>
+      </div>
+  </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

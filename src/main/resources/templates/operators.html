@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/modal_window.css}">
+    <title>Операторы</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Список операторов</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/operators}" method="get">
+            <label for="operatorSelect">Поиск по:</label>
+            <select id="operatorSelect" name="keyBy">
+                <option value="first_name" th:selected="${keyBy == 'first_name'}">Имени</option>
+                <option value="last_name" th:selected="${keyBy == 'last_name'}">Фамилии</option>
+                <option value="email" th:selected="${keyBy == 'email'}">Email</option>
+                <option value="phone_number" th:selected="${keyBy == 'phone_number'}">Телефону</option>
+                <option value="address" th:selected="${keyBy == 'address'}">Адресу</option>
+            </select>
+            <label>
+                <input type="text" name="search" placeholder="Поиск операторов..." th:value="${search}" />
+            </label>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${pageOperators.number}" name="page">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <th:block th:if="${foundOperators != null && !foundOperators.isEmpty()}">
+            <p th:if="${jsonText}" th:text="${'Найдено ' + foundOperators.getTotalElements() + ' записей'}"></p>
+            <!-- Таблица найденных операторов-->
+            <table>
+
+                <thead>
+                <tr class="searched">
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Email</th>
+                    <th>Телефон</th>
+                    <th>Дата рождения</th>
+                    <th>Адрес</th>
+                    <th>Статус</th>
+                    <th:block th:if="${isUpdate}">
+                        <th>Обновление</th>
+                        <th>Удаление</th>
+                    </th:block>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="operator : ${foundOperators.content}">
+                    <td th:text="${operator.id}"></td>
+                    <td th:text="${operator.firstName}"></td>
+                    <td th:text="${operator.lastName}"></td>
+                    <td th:text="${operator.email}"></td>
+                    <td th:text="${operator.phoneNumber}"></td>
+                    <td th:text="${#temporals.format(operator.dateOfBirth, 'yyyy/MM/dd')}"></td>
+                    <td th:text="${operator.address}"></td>
+                    <td th:text="${operator.status ? 'Активен' : 'Не раб.'}" ></td>
+                    <th:block th:if="${isUpdate}">
+                        <td>
+                            <form th:action="@{/admin/operators/edit/{id}(id=${operator.id})}" method="get">
+                                <input type="submit" value="Изменить">
+                            </form>
+                        </td>
+                        <td>
+                            <button th:onclick="'showModal(this)'"
+                                    th:data-delete-url="@{/admin/operators/delete/{id}(id=${operator.id})}">Удалить</button>
+                        </td>
+                    </th:block>
+                </tr>
+                </tbody>
+            </table>
+        </th:block>
+
+        <!-- Элементы управления пагинацией для найденных операторов -->
+        <div th:if="${foundOperators != null && !foundOperators.isEmpty()}" class="pagination">
+            <a th:if="${foundOperators.hasPrevious()}" th:href="@{/operators(searchPage=${foundOperators.number - 1}, page=${pageOperators.number}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${foundOperators.number + 1} + ' из ' + ${foundOperators.totalPages}"></span>
+            <a th:if="${foundOperators.hasNext()}" th:href="@{/operators(searchPage=${foundOperators.number + 1}, page=${pageOperators.number}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+
+        <!-- Таблица операторов -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Дата рождения</th>
+                <th>Адрес</th>
+                <th>Статус</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                    <th>Удаление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="operator : ${pageOperators.content}">
+                <td th:text="${operator.id}"></td>
+                <td th:text="${operator.firstName}"></td>
+                <td th:text="${operator.lastName}"></td>
+                <td th:text="${operator.email}"></td>
+                <td th:text="${operator.phoneNumber}"></td>
+                <td th:text="${#temporals.format(operator.dateOfBirth, 'yyyy/MM/dd')}"></td>
+                <td th:text="${operator.address}"></td>
+                <td th:text="${operator.status ? 'Активен' : 'Не раб.'}" ></td>
+                <th:block th:if="${isUpdate}">
+                <td>
+                    <form th:action="@{/admin/operators/edit/{id}(id=${operator.id})}" method="get" >
+                        <input type="submit" value="Изменить">
+                    </form>
+                </td>
+                <td>
+                    <button th:onclick="'showModal(this)'"
+                            th:data-delete-url="@{/admin/operators/delete/{id}(id=${operator.id})}">Удалить</button>
+                </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для всех операторов -->
+        <div th:if="${pageOperators != null && !pageOperators.isEmpty()}" class="pagination">
+            <a th:if="${pageOperators.hasPrevious()}" th:href="@{/operators(page=${pageOperators.number - 1}, searchPage=${foundOperators != null ? foundOperators.number : 0}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${pageOperators.number + 1} + ' из ' + ${pageOperators.totalPages}"></span>
+            <a th:if="${pageOperators.hasNext()}" th:href="@{/operators(page=${pageOperators.number + 1}, searchPage=${foundOperators != null ? foundOperators.number : 0}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+
+
+    </div>
+</div>
+<!-- Подключение модального окна -->
+<script th:src="@{/js/delete_modal_window.js}"></script>
+<div th:insert="~{fragments/deleteModal :: #deleteModal}"></div>
+
+<script th:src="@{/js/expande.js}"></script>
+
+</body>
+</html>

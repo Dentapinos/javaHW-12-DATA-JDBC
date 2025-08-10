@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/c_operator.css}">
+    <title>Изменить задачу</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Изменить задачу</h1>
+        <div class="content-center">
+            <!-- Форма для изменения задачи -->
+            <form th:action="@{/admin/tasks/edit/{id}(id=${task.id})}" method="post" class="form-container">
+                <div class="form__item">
+                    <label for="operator" class="form__label">Для кого задача:</label>
+                    <input type="text" id="operator" th:value="${operator.firstName + ' ' + operator.lastName}"  readonly>
+                </div>
+
+                <div class="form__item">
+                    <label for="taskText" class="form__label">Текст задачи:</label>
+                    <textarea id="taskText" class="form__input" name="taskDetails" required th:text="${task.taskDetails}"></textarea>
+                </div>
+                <input type="hidden" name="operatorId" th:value="${operator.id}">
+                <div class="block_btn">
+                    <input type="submit" value="Сохранить" class="form__btn" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

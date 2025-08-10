@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/task.css}">
+    <link rel="stylesheet" th:href="@{/css/modal_window.css}">
+    <title>Задачи</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Список задач</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/tasks}" method="get">
+            <label for="operatorSelect">Поиск по оператору:</label>
+            <select id="operatorSelect" name="operatorId">
+                <th:block th:if="${!listNames.isEmpty()}" th:each="operator : ${listNames}">
+                    <option th:text="${operator.firstName + ' ' + operator.lastName}" th:value="${operator.id}"></option>
+                </th:block>
+                <th:block th:if="${listNames.isEmpty()}">
+                    <option disabled>Операторов нет</option>
+                </th:block>
+            </select>
+            <input type="submit" value="Поиск" th:disabled="${listNames.isEmpty()}">
+            <input type="hidden" th:value="${operators.number}" name="page">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <!-- Таблица найденного оператора и его задач -->
+        <th:block th:if="${foundOperator != null}">
+            <table>
+                <thead>
+                <tr class="searched">
+                    <th>Оператор</th>
+                    <th>ID задачи</th>
+                    <th>Детали задачи</th>
+                    <th>Статус</th>
+                    <th:block th:if="${isUpdate}">
+                        <th>Обновление</th>
+                        <th>Удаление</th>
+                    </th:block>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:if="${foundOperator.tasks.size() > 0}">
+                    <tr class="tr__child">
+                        <td th:text="${foundOperator.firstName + ' ' + foundOperator.lastName}" th:rowspan="${foundOperator.tasks.size()}"></td>
+                        <td th:text="${foundOperator.tasks.get(0).id}"></td>
+                        <td th:text="${foundOperator.tasks.get(0).taskDetails}"></td>
+                        <td th:text="${foundOperator.tasks.get(0).isCompleted ? 'Выполнено' : 'Не выполнено'}"></td>
+                        <th:block th:if="${isUpdate}">
+                            <td>
+                                <form th:action="@{/admin/tasks/edit/{id}(id=${foundOperator.tasks.get(0).id})}" method="get">
+                                    <input type="hidden" th:value="${foundOperator.getId()}" name="operatorId">
+                                    <input type="submit" value="Изменить" />
+                                </form>
+                            </td>
+                            <td>
+                                <button th:onclick="'showModal(this)'"
+                                        th:data-delete-url="@{/admin/tasks/delete/{id}(id=${foundOperator.tasks.get(0).id}, operatorId=${foundOperator.id})}">Удалить</button>
+                            </td>
+                        </th:block>
+                    </tr>
+                    <th:block th:each="task, iterStat : ${foundOperator.tasks}">
+                        <th:block th:if="${iterStat.index > 0}">
+                            <tr>
+                                <td th:text="${task.id}"></td>
+                                <td th:text="${task.taskDetails}"></td>
+                                <td th:text="${task.isCompleted ? 'Выполнено' : 'Не выполнено'}"></td>
+                                <th:block th:if="${isUpdate}">
+                                    <td>
+                                        <form th:action="@{/admin/tasks/edit/{id}(id=${task.id})}" method="get">
+                                            <input type="hidden" th:value="${foundOperator.getId()}" name="operatorId">
+                                            <input type="submit" value="Изменить" />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button th:onclick="'showModal(this)'"
+                                                th:data-delete-url="@{/admin/tasks/delete/{id}(id=${task.id}, operatorId=${foundOperator.id})}">Удалить</button>
+                                    </td>
+                                </th:block>
+                            </tr>
+                        </th:block>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${foundOperator.tasks.size() == 0}">
+                    <tr class="tr__child">
+                        <td th:text="${foundOperator.firstName + ' ' + foundOperator.lastName}">Оператор</td>
+                        <td></td>
+                        <td class="no__content_text">Нет задач</td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </th:block>
+
+        <!-- Таблица операторов и их задач -->
+        <table>
+            <thead>
+            <tr>
+                <th>Оператор</th>
+                <th>ID задачи</th>
+                <th>Детали задачи</th>
+                <th>Статус</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                    <th>Удаление</th>
+                </th:block>
+            </tr>
+            </thead>
+
+            <tbody>
+            <th:block th:each="operator : ${operators.content}">
+                <th:block th:if="${operator.tasks.size() > 0}">
+                    <tr class="tr__child">
+                        <td th:text="${operator.firstName + ' ' + operator.lastName}" th:rowspan="${operator.tasks.size()}"></td>
+                        <td th:text="${operator.tasks.get(0).id}"></td>
+                        <td th:text="${operator.tasks.get(0).taskDetails}"></td>
+                        <td th:text="${operator.tasks.get(0).isCompleted ? 'Выполнено' : 'Не выполнено'}"></td>
+                        <th:block th:if="${isUpdate}">
+                            <td>
+                                <form th:action="@{/admin/tasks/edit/{id}(id=${operator.tasks.get(0).id})}" method="get">
+                                    <input type="hidden" th:value="${operator.getId()}" name="operatorId">
+                                    <input type="submit" value="Изменить" />
+                                </form>
+                            </td>
+                            <td>
+                                <button th:onclick="'showModal(this)'"
+                                        th:data-delete-url="@{/admin/tasks/delete/{id}(id=${operator.tasks.get(0).id}, operatorId=${operator.id})}">Удалить</button>
+                            </td>
+                        </th:block>
+                    </tr>
+                    <th:block th:each="task, iterStat : ${operator.tasks}">
+                        <th:block th:if="${iterStat.index > 0}">
+                            <tr>
+                                <td th:text="${task.id}"></td>
+                                <td th:text="${task.taskDetails}"></td>
+                                <td th:text="${task.isCompleted ? 'Выполнено' : 'Не выполнено'}"></td>
+                                <th:block th:if="${isUpdate}">
+                                    <td>
+                                        <form th:action="@{/admin/tasks/edit/{id}(id=${task.id})}" method="get">
+                                            <input type="hidden" th:value="${operator.getId()}" name="operatorId">
+                                            <input type="submit" value="Изменить" />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button th:onclick="'showModal(this)'"
+                                                th:data-delete-url="@{/admin/tasks/delete/{id}(id=${task.id},  operatorId=${operator.id})}">Удалить</button>
+                                    </td>
+                                </th:block>
+                            </tr>
+                        </th:block>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${operator.tasks.size() == 0}">
+                    <tr class="tr__child">
+                        <td th:text="${operator.firstName + ' ' + operator.lastName}">Оператор</td>
+                        <td></td>
+                        <td class="no__content_text">Нет задач</td>
+                    </tr>
+                </th:block>
+            </th:block>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для всех операторов -->
+        <div th:if="${operators != null && !operators.isEmpty()}" class="pagination">
+            <a th:if="${operators.hasPrevious()}" th:href="@{/tasks(page=${operators.number - 1}, searchPage=${operators != null ? operators.number : 0}, operatorId=${operatorId}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${operators.number + 1} + ' из ' + ${operators.totalPages}"></span>
+            <a th:if="${operators.hasNext()}" th:href="@{/tasks(page=${operators.number + 1}, searchPage=${operators != null ? operators.number : 0}, operatorId=${operatorId}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+    </div>
+</div>
+<!-- Подключение модального окна -->
+<div th:insert="~{fragments/deleteModal :: #deleteModal}"></div>
+
+<script th:src="@{/js/delete_modal_window.js}"></script>
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

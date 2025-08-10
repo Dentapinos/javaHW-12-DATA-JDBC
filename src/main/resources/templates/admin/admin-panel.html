@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/index.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+    <title>Админка</title>
+</head>
+<body>
+<div class="area">
+  <!-- Включение фрагмента меню -->
+  <div th:replace="~{fragments/menu :: nav}"></div>
+
+  <div class="content">
+    <h1>Администрирование</h1>
+    <div class="dashboard">
+      <div class="dashboard-item" onclick="location.href='/admin/operators/add'">
+        <div class="dashboard-icon">
+          <img src="/icons/operator-add.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Создать Оператора</h2>
+        <p>Создание нового оператора</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/admin/work-phones/add'">
+        <div class="dashboard-icon">
+          <img src="/icons/phone-add.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Создать Телефон</h2>
+        <p>Добавить в базу новый телефон</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/admin/clients/add'">
+        <div class="dashboard-icon">
+          <img src="/icons/user-add.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Создать Клиента</h2>
+        <p>Добавить нового клиента</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/admin/tasks/add'">
+        <div class="dashboard-icon">
+          <img src="/icons/task-add.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Создать Задачу</h2>
+        <p>Добавить новую задачу</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/admin/orders/add'">
+        <div class="dashboard-icon">
+          <img src="/icons/order-add.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Создать Заявку</h2>
+        <p>Добавить новую заявку</p>
+      </div>
+
+      <div class="dashboard-item" onclick="location.href='/operators?isUpdate=true'">
+        <div class="dashboard-icon">
+          <img src="/icons/operator-setting.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Обновить оператора</h2>
+        <p>Обновление и удаление</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/work-phones?isUpdate=true'">
+        <div class="dashboard-icon">
+          <img src="/icons/phone-setting.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Обновить телефон</h2>
+        <p>Обновление и удаление</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/clients?isUpdate=true'">
+        <div class="dashboard-icon">
+          <img src="/icons/user-setting.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Обновить клиента</h2>
+        <p>Обновление и удаление</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/tasks?isUpdate=true'">
+        <div class="dashboard-icon">
+          <img src="/icons/task-setting.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Обновить задачу</h2>
+        <p>Обновление и удаление</p>
+      </div>
+      <div class="dashboard-item" onclick="location.href='/orders?isUpdate=true'">
+        <div class="dashboard-icon">
+          <img src="/icons/order-setting.svg" alt="Icon" class="icon-svg">
+        </div>
+        <h2>Обновить заявку</h2>
+        <p>Обновление и удаление</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/modal_window.css}">
+    <
+    <title>Заявки</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Список заявок</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/orders}" method="get">
+            <label for="orderSelect">Поиск по:</label>
+            <select id="orderSelect" name="keyBy">
+                <option value="operator_first_name" th:selected="${keyBy == 'operator_first_name'}">Имени оператора</option>
+                <option value="operator_last_name" th:selected="${keyBy == 'operator_last_name'}">Фамилии оператора</option>
+                <option value="client_first_name" th:selected="${keyBy == 'client_first_name'}">Имени клиента</option>
+                <option value="client_last_name" th:selected="${keyBy == 'client_last_name'}">Фамилии клиента</option>
+            </select>
+            <label>
+                <input type="text" name="search" placeholder="Поиск операторов..." th:value="${isStatus} ? '' : (${search} == null ? '' : ${search})" />
+            </label>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${orders.number}" name="pageBasic">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/orders}" method="get">
+            <label for="open_closed">Поиск по (Открыта/Завершена):</label>
+            <select id="open_closed" name="search">
+                <option value="open" th:selected="${keyBy == 'open'}">Открытые</option>
+                <option value="closed" th:selected="${keyBy == 'closed'}">Закрытые</option>
+            </select>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${orders.number}" name="pageBasic">
+            <input type="hidden" value="op_cl" name="keyBy">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/orders}" method="get">
+            <label for="statusSelect">Поиск по статусу:</label>
+            <select id="statusSelect" name="search">
+                <option value="REJECTED" th:selected="${search == 'REJECTED'}">Отклонена</option>
+                <option value="EXECUTED" th:selected="${search == 'EXECUTED'}">Выполнена</option>
+                <option value="SECONDARY_REVIEW" th:selected="${search == 'SECONDARY_REVIEW'}">На рассмотрении</option>
+                <option value="POSTPONED" th:selected="${search == 'POSTPONED'}">Перенесена</option>
+            </select>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${orders.number}" name="pageBasic">
+            <input type="hidden" value="status" name="keyBy">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <th:block th:if="${searchedOrders != null && !searchedOrders.isEmpty()}">
+            <input type="hidden" th:value="${searchedOrders.number}" name="pageSearch">
+            <!-- Таблица заявок -->
+            <table>
+                <thead>
+                <tr class="searched">
+                    <th>ID</th>
+                    <th>Описание</th>
+                    <th>Дата создания</th>
+                    <th>Дата закрытия</th>
+                    <th>Статус</th>
+                    <th>Комментарий клиента</th>
+                    <th>Комментарий оператора</th>
+                    <th>Клиент</th>
+                    <th>Оператор</th>
+                    <th:block th:if="${isUpdate}">
+                        <th>Обновление</th>
+                        <th>Удаление</th>
+                    </th:block>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${searchedOrders.content}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.description}"></td>
+                    <td th:text="${#temporals.format(order.created, 'yyyy/MM/dd HH:mm')}"></td>
+                    <td th:text="${order.closed != null ? #temporals.format(order.closed, 'yyyy/MM/dd HH:mm') : 'Не закрыта'}"></td>
+                    <td th:text="${order.status.getStatus()}"></td>
+                    <td th:text="${order.clientsComment != null ? order.clientsComment : 'Нет комментария'}"></td>
+                    <td th:text="${order.operatorsComment != null ? order.operatorsComment : 'Нет комментария'}"></td>
+                    <td th:text="${order.clientFirstName + ' ' + order.clientLastName}"></td>
+                    <td th:text="${order.operatorFirstName + ' ' + order.operatorLastName}"></td>
+                    <th:block th:if="${isUpdate}">
+                        <td>
+                            <form th:action="@{/admin/orders/edit/{id}(id=${order.id})}" method="get">
+                                <input type="submit" value="Изменить">
+                            </form>
+                        </td>
+                        <td>
+                            <button th:onclick="'showModal(this)'"
+                                    th:data-delete-url="@{/admin/orders/delete/{id}(id=${order.id})}">Удалить</button>
+                        </td>
+                    </th:block>
+
+                </tr>
+                </tbody>
+            </table>
+            <!-- Элементы управления пагинацией -->
+            <div th:if="${searchedOrders != null && !searchedOrders.isEmpty()}" class="pagination">
+                <a th:if="${searchedOrders.hasPrevious()}" th:href="@{/orders(pageSearch=${searchedOrders.number - 1}, pageBasic=${pageBasic}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Предыдущая</a>
+                <span th:text="${searchedOrders.number + 1} + ' из ' + ${searchedOrders.totalPages}"></span>
+                <a th:if="${searchedOrders.hasNext()}" th:href="@{/orders(pageSearch=${searchedOrders.number + 1}, pageBasic=${pageBasic}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Следующая</a>
+            </div>
+        </th:block>
+
+
+        <!-- Таблица заявок -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Описание</th>
+                <th>Дата создания</th>
+                <th>Дата закрытия</th>
+                <th>Статус</th>
+                <th>Комментарий клиента</th>
+                <th>Комментарий оператора</th>
+                <th>Клиент</th>
+                <th>Оператор</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                    <th>Удаление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders.content}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.description}"></td>
+                <td th:text="${#temporals.format(order.created, 'yyyy/MM/dd HH:mm')}"></td>
+                <td th:text="${order.closed != null ? #temporals.format(order.closed, 'yyyy/MM/dd HH:mm') : 'Не закрыта'}"></td>
+                <td th:text="${order.status.getStatus()}"></td>
+                <td th:text="${order.clientsComment != null ? order.clientsComment : 'Нет комментария'}"></td>
+                <td th:text="${order.operatorsComment != null ? order.operatorsComment : 'Нет комментария'}"></td>
+                <td th:text="${order.clientFirstName + ' ' + order.clientLastName}"></td>
+                <td th:text="${order.operatorFirstName + ' ' + order.operatorLastName}"></td>
+                <th:block th:if="${isUpdate}">
+                    <td>
+                        <form th:action="@{/admin/orders/edit/{id}(id=${order.id})}" method="get">
+                            <input type="submit" value="Изменить">
+                        </form>
+                    </td>
+                    <td>
+                        <button th:onclick="'showModal(this)'"
+                                th:data-delete-url="@{/admin/orders/delete/{id}(id=${order.id})}">Удалить</button>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией -->
+        <div th:if="${orders != null && !orders.isEmpty()}" class="pagination">
+            <a th:if="${orders.hasPrevious()}" th:href="@{/orders(pageBasic=${orders.number - 1}, pageSearch=${pageSearch}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate} )}">Предыдущая</a>
+            <span th:text="${orders.number + 1} + ' из ' + ${orders.totalPages}"></span>
+            <a th:if="${orders.hasNext()}" th:href="@{/orders(pageBasic=${orders.number + 1}, pageSearch=${pageSearch}, keyBy=${keyBy}, search=${search}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение модального окна -->
+<script th:src="@{/js/delete_modal_window.js}"></script>
+<div th:insert="~{fragments/deleteModal :: #deleteModal}"></div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

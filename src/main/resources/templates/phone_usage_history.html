@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>История использования телефонов</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>История использования телефонов</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/phone-usage-history}" method="get">
+            <label for="phoneUsageHistorySelect">Поиск по:</label>
+            <select id="phoneUsageHistorySelect" name="searchKey">
+                <option value="operatorFirstName" th:selected="${searchKey == 'operatorFirstName'}">Имени оператора</option>
+                <option value="operatorLastName" th:selected="${searchKey == 'operatorLastName'}">Фамилии оператора</option>
+                <option value="phoneSerial" th:selected="${searchKey == 'phoneSerial'}">Серийному номеру телефона</option>
+                <option value="phoneNumber" th:selected="${searchKey == 'phoneNumber'}">Номеру телефона</option>
+            </select>
+            <label>
+                <input type="text" name="searchValue" placeholder="Поиск истории использования телефонов..." th:value="${searchValue}" />
+            </label>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${pagePrimaryContent}" name="pagePrimaryContent">
+        </form>
+
+        <p th:if="${searchValue != null && !searchValue.isEmpty()}" th:text="${foundPhoneUsageHistory != null && !foundPhoneUsageHistory.isEmpty() ? ('Найдено ' + foundPhoneUsageHistory.getTotalElements() + ' записей') : 'Найдено 0 записей '}"></p>
+
+        <!-- Таблица найденной истории использования телефонов-->
+        <table th:if="${foundPhoneUsageHistory != null && !foundPhoneUsageHistory.isEmpty()}">
+            <thead>
+            <tr class="searched">
+                <th>ID</th>
+                <th>Имя оператора</th>
+                <th>Фамилия оператора</th>
+                <th>Серийный номер телефона</th>
+                <th>Номер телефона</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history : ${foundPhoneUsageHistory.content}">
+                <td th:text="${history.id}"></td>
+                <td th:text="${history.operatorFirstName}"></td>
+                <td th:text="${history.operatorLastName}"></td>
+                <td th:text="${history.phoneSerial}"></td>
+                <td th:text="${history.phoneNumber}"></td>
+                <td th:text="${history.startTime != null ? #temporals.format(history.startTime, 'yyyy/MM/dd HH:mm') : history.startTime}"></td>
+                <td th:text="${history.endTime != null ? #temporals.format(history.endTime, 'yyyy/MM/dd HH:mm') : history.endTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для найденной истории использования телефонов -->
+        <div th:if="${foundPhoneUsageHistory != null && !foundPhoneUsageHistory.isEmpty()}" class="pagination">
+            <a th:if="${foundPhoneUsageHistory.hasPrevious()}" th:href="@{/phone-usage-history(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${pagePrimaryContent}, pageSearchedContent=${foundPhoneUsageHistory.number - 1})}">Предыдущая</a>
+            <span th:text="${foundPhoneUsageHistory.number + 1} + ' из ' + ${foundPhoneUsageHistory.totalPages}"></span>
+            <a th:if="${foundPhoneUsageHistory.hasNext()}" th:href="@{/phone-usage-history(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${pagePrimaryContent}, pageSearchedContent=${foundPhoneUsageHistory.number + 1})}">Следующая</a>
+        </div>
+
+        <!-- Карточка для отображения текста -->
+        <div class="card" th:if="${jsonText}">
+            <pre th:text="${jsonText}"></pre>
+        </div>
+
+        <!-- Таблица истории использования телефонов -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя оператора</th>
+                <th>Фамилия оператора</th>
+                <th>Серийный номер телефона</th>
+                <th>Номер телефона</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history : ${listAllPhoneUsageHistory.content}">
+                <td th:text="${history.id}"></td>
+                <td th:text="${history.operatorFirstName}"></td>
+                <td th:text="${history.operatorLastName}"></td>
+                <td th:text="${history.phoneSerial}"></td>
+                <td th:text="${history.phoneNumber}"></td>
+                <td th:text="${history.startTime != null ? #temporals.format(history.startTime, 'yyyy/MM/dd HH:mm') : history.startTime}"></td>
+                <td th:text="${history.endTime != null ? #temporals.format(history.endTime, 'yyyy/MM/dd HH:mm') : history.endTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для всех записей истории использования телефонов -->
+        <div th:if="${listAllPhoneUsageHistory != null && !listAllPhoneUsageHistory.isEmpty()}" class="pagination">
+            <a th:if="${listAllPhoneUsageHistory.hasPrevious()}" th:href="@{/phone-usage-history(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${listAllPhoneUsageHistory.number - 1}, pageSearchedContent=${pageSearchedContent})}">Предыдущая</a>
+            <span th:text="${listAllPhoneUsageHistory.number + 1} + ' из ' + ${listAllPhoneUsageHistory.totalPages}"></span>
+            <a th:if="${listAllPhoneUsageHistory.hasNext()}" th:href="@{/phone-usage-history(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${listAllPhoneUsageHistory.number + 1}, pageSearchedContent=${pageSearchedContent})}">Следующая</a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

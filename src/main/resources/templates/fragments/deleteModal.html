@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<!-- Модальное окно подтверждения удаления -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <p>Вы уверены?</p>
+    <div class="modal-buttons">
+      <button onclick="confirmDelete()">Удалить</button>
+      <button onclick="closeModal()">Нет</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

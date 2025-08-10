@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/c_operator.css}">
+    <title>Редактировать заявку</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Редактировать заявку</h1>
+
+        <div class="content-center">
+            <form th:action="@{/admin/orders/edit}" th:object="${orderDto}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form__item">
+                    <label for="description" class="form__label">Описание:</label>
+                    <textarea id="description" class="form__input" th:field="*{description}" required></textarea>
+                </div>
+
+                <div class="form__item">
+                    <label for="clientsComment" class="form__label">Комментарий клиента:</label>
+                    <textarea id="clientsComment" class="form__input" th:field="*{clientsComment}"></textarea>
+                </div >
+
+                <div class="form__item">
+                    <label for="operatorsComment" class="form__label">Комментарий оператора:</label>
+                    <textarea id="operatorsComment" class="form__input" th:field="*{operatorsComment}"></textarea>
+                </div>
+
+                <div class="form__item">
+                    <label for="client" class="form__label">Клиент:<i class="placeholder-item">(только чтение)</i></label>
+                        <input id="client" type="text" class="form__input"
+                               th:value="${orderDto.clientLastName + ' ' + orderDto.clientFirstName}" readonly>
+                    <input type="hidden" th:field="*{clientId}">
+                </div>
+
+                <div class="form__item">
+                    <label for="operator" class="form__label">Оператор:<i class="placeholder-item">(только чтение)</i> </label>
+                        <input type="text" id="operator" class="form__input"
+                               th:value="${orderDto.operatorLastName + ' ' + orderDto.operatorFirstName}" readonly>
+                        <input type="hidden" th:field="*{operatorId}">
+                </div>
+
+                <div class="block_btn">
+                    <input type="submit" value="Изменить" class="form__btn" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>Клиенты</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Список клиентов</h1>
+
+        <!-- Поисковое поле -->
+        <form th:action="@{/clients}" method="get">
+            <label for="clientSelect">Поиск по:</label>
+            <select id="clientSelect" name="searchKey">
+                <option value="firstName" th:selected="${searchKey == 'firstName'}">Имени</option>
+                <option value="lastName" th:selected="${searchKey == 'lastName'}">Фамилии</option>
+                <option value="patronymic" th:selected="${searchKey == 'patronymic'}">Отчеству</option>
+                <option value="phone" th:selected="${searchKey == 'phone'}">Номеру телефона</option>
+                <option value="city" th:selected="${searchKey == 'city'}">Городу</option>
+                <option value="age" th:selected="${searchKey == 'age'}">Возрасту</option>
+            </select>
+            <label>
+                <input type="text" name="searchValue" placeholder="Поиск клиентов..." th:value="${searchValue}" />
+            </label>
+            <input type="submit" value="Поиск">
+            <input type="hidden" th:value="${pagePrimaryContent}" name="pagePrimaryContent">
+            <input type="hidden" th:value="${isUpdate}" name="isUpdate">
+        </form>
+
+        <p th:if="${searchValue != null && !searchValue.isEmpty()}" th:text="${foundClients != null && !foundClients.isEmpty() ? ('Найдено ' + foundClients.getTotalElements() + ' записей') : 'Найдено 0 записей '}"></p>
+
+        <!-- Таблица найденных клиентов-->
+        <table th:if="${foundClients != null && !foundClients.isEmpty()}">
+            <thead>
+            <tr class="searched">
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>Телефон</th>
+                <th>Возраст</th>
+                <th>Город</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="client : ${foundClients.content}">
+                <td th:text="${client.id}"></td>
+                <td th:text="${client.firstName}"></td>
+                <td th:text="${client.lastName}"></td>
+                <td th:text="${client.patronymic}"></td>
+                <td th:text="${client.phoneNumber}"></td>
+                <td th:text="${client.age}"></td>
+                <td th:text="${client.city}"></td>
+                <th:block th:if="${isUpdate}">
+                    <td>
+                        <form th:action="@{/admin/clients/edit/{id}(id=${client.id})}" method="get">
+                            <input type="submit" value="Изменить">
+                        </form>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для найденных клиентов -->
+        <div th:if="${foundClients != null && !foundClients.isEmpty()}" class="pagination">
+            <a th:if="${foundClients.hasPrevious()}" th:href="@{/clients(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${pagePrimaryContent}, pageSearchedContent=${foundClients.number - 1}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${foundClients.number + 1} + ' из ' + ${foundClients.totalPages}"></span>
+            <a th:if="${foundClients.hasNext()}" th:href="@{/clients(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${pagePrimaryContent}, pageSearchedContent=${foundClients.number + 1}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+
+        <!-- Таблица клиентов -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>Телефон</th>
+                <th>Возраст</th>
+                <th>Город</th>
+                <th:block th:if="${isUpdate}">
+                    <th>Обновление</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="client : ${listAllClients.content}">
+                <td th:text="${client.id}"></td>
+                <td th:text="${client.firstName}"></td>
+                <td th:text="${client.lastName}"></td>
+                <td th:text="${client.patronymic}"></td>
+                <td th:text="${client.phoneNumber}"></td>
+                <td th:text="${client.age}"></td>
+                <td th:text="${client.city}"></td>
+                <th:block th:if="${isUpdate}">
+                    <td>
+                        <form th:action="@{/admin/clients/edit/{id}(id=${client.id})}" method="get" >
+                            <input type="submit" value="Изменить">
+                        </form>
+                    </td>
+                </th:block>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Элементы управления пагинацией для всех клиентов -->
+        <div th:if="${listAllClients != null && !listAllClients.isEmpty()}" class="pagination">
+            <a th:if="${listAllClients.hasPrevious()}" th:href="@{/clients(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${listAllClients.number - 1}, pageSearchedContent=${pageSearchedContent}, isUpdate=${isUpdate})}">Предыдущая</a>
+            <span th:text="${listAllClients.number + 1} + ' из ' + ${listAllClients.totalPages}"></span>
+            <a th:if="${listAllClients.hasNext()}" th:href="@{/clients(searchKey=${searchKey}, searchValue=${searchValue}, pagePrimaryContent=${listAllClients.number + 1}, pageSearchedContent=${pageSearchedContent}, isUpdate=${isUpdate})}">Следующая</a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

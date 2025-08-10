@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/c_operator.css}">
+    <title>Добавить оператора</title>
+</head>
+<body>
+<div class="area">
+    <!-- Включение фрагмента меню -->
+    <div th:replace="~{fragments/menu :: nav}"></div>
+
+    <div class="content">
+        <h1>Добавить задачу</h1>
+        <div class="content-center">
+            <!-- Форма для добавления задачи -->
+            <form th:action="@{/admin/tasks/add}" method="post" class="form-container">
+            <div class="form__item">
+                <label for="operator" class="form__label">Для кого задача:</label>
+                <select id="operator" name="operatorId" required>
+                    <option value="">Выберите оператора</option>
+                    <option th:each="operator : ${operators}" th:value="${operator.id}" th:text="${operator.firstName + ' ' + operator.lastName}"></option>
+                </select>
+            </div>
+
+            <div class="form__item">
+                <label for="taskText" class="form__label">Текст задачи:</label>
+                <textarea id="taskText" class="form__input" name="taskText" required></textarea>
+            </div>
+
+                <div class="block_btn">
+                    <input type="submit" value="Добавить" class="form__btn" />
+                </div>
+        </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/expande.js}"></script>
+</body>
+</html>

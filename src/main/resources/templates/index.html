@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>Главная</title>
+</head>
+<body>
+    <div class="area">
+        <!-- Включение фрагмента меню -->
+        <div th:replace="~{fragments/menu :: nav}"></div>
+
+        <div class="content">
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Добро пожаловать в наш сервис</h1>
+                    <p>Наш сервис предоставляет данные об операторах и клиентах. Вы можете просматривать информацию о операторах, задачах, рабочих телефонах и истории использования телефонов. Используйте меню слева для навигации по различным разделам.</p>
+                </div>
+                <img th:src="@{/images/contact-01.png}" alt="Hero Image" class="hero-image">
+            </div>
+            <div>
+                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum ipsa quam, aliquid possimus repudiandae quo suscipit earum laborum impedit. Culpa libero autem, dolor beatae sequi, natus neque iusto porro hic magni asperiores ea delectus repellendus commodi, aliquid consequatur. Voluptatem numquam reiciendis omnis dicta minima perferendis voluptatibus necessitatibus rem, commodi excepturi eligendi maiores earum vel velit, provident repellat. Doloribus recusandae nam deserunt! Doloribus sed recusandae fugiat? Accusantium commodi ipsa libero eaque, recusandae voluptatem aspernatur nam aperiam perferendis ut aliquam saepe eum praesentium quod? Eaque, nam id! Ab quod enim, recusandae temporibus vitae laudantium modi commodi porro architecto, obcaecati, ipsam nobis ut! Reprehenderit tempora fugiat veniam illum. Itaque, excepturi perferendis? Nobis exercitationem minima, odio nulla sit ut dolor soluta omnis, aut suscipit voluptatum perferendis! Eaque atque deleniti iure accusamus molestiae nostrum, quidem minus asperiores impedit pariatur voluptatibus? Fuga quaerat quo, sapiente iure, voluptatum officiis est tempora, ipsam quibusdam recusandae laboriosam voluptas voluptatem nesciunt quasi libero illum. Explicabo voluptatum nisi, unde nostrum, repudiandae cupiditate consectetur voluptas minima iste culpa impedit suscipit illum dolorem quibusdam non neque tempora reprehenderit porro? Ipsa dolore sunt nesciunt delectus. Officiis quis, earum minus architecto omnis iste iure illum temporibus id culpa nobis magnam aspernatur assumenda placeat, delectus quos possimus ad. Nulla rem, inventore qui sed suscipit sit quam obcaecati porro, natus excepturi vitae eum amet atque in commodi optio earum modi provident? Ut quo eaque quam ex dignissimos culpa incidunt velit ipsa perferendis natus, laudantium sint itaque eum! Adipisci, quibusdam necessitatibus alias aut illo sit. Earum libero, ab magnam saepe, tenetur accusantium quisquam reprehenderit itaque quibusdam ratione repellendus at pariatur sequi. Nostrum quaerat ut minima deserunt. Ratione enim iste, suscipit mollitia porro omnis libero ducimus quia laudantium saepe vel soluta aut magnam aperiam expedita praesentium, ad deserunt tempora cum. Iusto consectetur a deserunt facilis eos. Expedita, odit eius!</p>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/expande.js}"></script>
+</body>
+</html>
