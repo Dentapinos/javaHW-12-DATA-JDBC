@@ -41,7 +41,7 @@ public class PhoneUsageHistoryRepository {
             SearchField.PHONE_NUMBER, "p.phone_number"
     );
 
-    private enum SearchField {
+    public enum SearchField {
         OPERATOR_FIRST_NAME, OPERATOR_LAST_NAME, PHONE_SERIAL, PHONE_NUMBER
     }
 
